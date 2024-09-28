@@ -63,24 +63,24 @@ After install, the login credentials will be `root` / `google1!`
 
 #### Backstory Stuff
 There's quite a bit going on under the hood for this to work - here is a rough sequence:
-- VM boots from ISO
+- VM powers on with ISO mounted
 - iPXE bootloader executes embedded script  
 -- fetches netboot/initramfs from public http repo  
 -- fetches netboot/kernel from public http repo  
 -- sets kernel options and boots  
 - Alpine kernel begins boot sequence  
 -- sets temp local networking, hostname, and package repo  
--- fetches modloop overlay from public http repo  
--- fetches apkovl file from nominated public http repo  
+-- fetches `MODLOOP` overlay from public http repo  
+-- fetches `APKOVL` file from nominated public http repo  
 - initial netboot succeeds  
-- execute install.sh from apkovl file  
+- execute `install.sh` from apkovl file  
 -- read kernel params  
 -- configure permanent static networking/dns/hostname  
--- set default root password to `root:google1!`  
+-- set default root password
 -- setup package repo and install os to disk  
--- if BOOTSCRIPT kernel param defined, download ready for next boot  
+-- if `BOOTSCRIPT` kernel param defined, download ready for next boot  
 -- reboot from local installation  
-- if BOOTSCRIPT present, execute post restart  
+- if `BOOTSCRIPT` present, execute post restart  
 
 PHEW - luckily all of the above occurs in a relatively quick 2 minutes - minus any additional scripts.
 
