@@ -33,16 +33,15 @@ This replaces the existing legacy PXE code.
 This involves crafting a pre-baked bootable ISO CDROM image, and mounting this to a machine to boot from.
 This replaces the existing legacy PXE code.
 
-### Examples
-#### Unattended Alpine Installation using ISO
+### Unattended Alpine Installation using ISO
 Here is an example of how to leverage iPXE to kickoff an unattended Centos installation on a new VM.  
 This uses the "embedded iso" method described above.
 
 #### Usage
-To use this example, simply download the pre-made ISO from here:  
+Simply download the pre-made ISO from here:  
 http://pxe.apnex.io/alpine.iso
 
-This iso has a menu, that let's you select initial network as DHCP or manually enter static addressing
+This ISO has a menu, that let's you select initial network as DHCP or manually enter static addressing
 
 It is a tiny 1MB ISO - as it contains only embedded iPXE code.  
 All of the remaining kernel, OS files will be bootstrapped over the Internet via HTTP.  
@@ -65,23 +64,23 @@ After install, the login credentials will be `root` / `google1!`
 #### Backstory Stuff
 There's quite a bit going on under the hood for this to work - here is a rough sequence:
 - VM boots from ISO
-- iPXE bootloader executes embedded script
--- fetches netboot/initramfs from public http repo
--- fetches netboot/kernel from public http repo
--- sets kernel options and boots
-- Alpine kernel begins boot sequence
--- sets temp local networking, hostname, and package repo
--- fetches modloop overlay from public http repo
--- fetches apkovl file from nominated public http repo
-- initial netboot succeeds
-- execute install.sh from apkovl file
--- read kernel params
--- configure permanent static networking/dns/hostname
--- set default root password to `root:google1!`
--- setup package repo and install os to disk
--- if BOOTSCRIPT kernel param defined, download ready for next boot
--- reboot from local installation
-- if BOOTSCRIPT present, execute post restart
+- iPXE bootloader executes embedded script  
+-- fetches netboot/initramfs from public http repo  
+-- fetches netboot/kernel from public http repo  
+-- sets kernel options and boots  
+- Alpine kernel begins boot sequence  
+-- sets temp local networking, hostname, and package repo  
+-- fetches modloop overlay from public http repo  
+-- fetches apkovl file from nominated public http repo  
+- initial netboot succeeds  
+- execute install.sh from apkovl file  
+-- read kernel params  
+-- configure permanent static networking/dns/hostname  
+-- set default root password to `root:google1!`  
+-- setup package repo and install os to disk  
+-- if BOOTSCRIPT kernel param defined, download ready for next boot  
+-- reboot from local installation  
+- if BOOTSCRIPT present, execute post restart  
 
 PHEW - luckily all of the above occurs in a relatively quick 2 minutes - minus any additional scripts.
 
@@ -123,9 +122,9 @@ kernel ${netboot}/vmlinuz-${flavor} \
     bootscript=${bootscript}
 boot
 ```
-**NOTE**
-DHCP is only used to build Alpine over the network.
-Currently `install.sh` converts the dynamic IP into static networking during install.
+**NOTE**  
+DHCP is only used to build Alpine over the network.  
+Currently `install.sh` converts the dynamic IP into static networking during install.  
 This means that the final booted VM will have static IP addressing.
 
 **Minimal `alpine.ipxe` example that embeds static networking**
