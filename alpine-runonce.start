@@ -1,0 +1,30 @@
+#!/sbin/openrc-run
+
+start () {
+	echo "This is a Run Once script... k3s install here"
+	rm /etc/runlevels/default/runonce.start # remove self from boot
+
+	## set bash as default shell for root
+	apk add bash \
+		shadow
+	chsh root -s /bin/bash
+
+	## add additional packages
+	apk add curl \
+		nano \
+		jq
+
+	## enable open-vm-tools
+	apk add open-vm-tools \
+		open-vm-tools-guestinfo \
+		open-vm-tools-deploypkg
+	rc-update add open-vm-tools
+	rc-service open-vm-tools start
+
+	## enable cgroups v2
+	rc-update add cgroups
+	rc-service cgroups start
+
+	## install k3s
+	#curl -fsSL http://labops.sh/k3s/runonce.sh | bash
+}
